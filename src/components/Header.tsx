@@ -42,7 +42,7 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <img
-              src="/logo-veronika-hordieieva.png"
+              src="/images/logo-veronika-hordieieva.png"
               alt="Veronika Logo"
               className="w-14 h-auto drop-shadow-lg object-contain"
             />
