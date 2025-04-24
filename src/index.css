@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;700&display=swap');
+
+body {
+  @apply bg-gradient-to-b from-black via-burgundy to-deepBurgundy text-[#F2F2F2] font-serif;
+}
