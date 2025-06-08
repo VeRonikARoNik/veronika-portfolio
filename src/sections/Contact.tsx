@@ -17,19 +17,33 @@ const Contact: React.FC = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
+    try {
+      const response = await fetch("https://formspree.io/f/meokaeko", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
 
-      setTimeout(() => {
-        setSubmitted(false);
-      }, 5000);
-    }, 1500);
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("An error occurred. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -78,12 +92,50 @@ const Contact: React.FC = () => {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input type="text" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gold/30 bg-white dark:bg-[#2a1914] text-[#2b1a17] dark:text-cream outline-none focus:ring-2 focus:ring-gold" />
-                  <input type="email" name="email" placeholder="Your Email" value={formData.email} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gold/30 bg-white dark:bg-[#2a1914] text-[#2b1a17] dark:text-cream outline-none focus:ring-2 focus:ring-gold" />
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gold/30 bg-white dark:bg-[#2a1914] text-[#2b1a17] dark:text-cream outline-none focus:ring-2 focus:ring-gold"
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Your Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2 rounded-lg border border-gold/30 bg-white dark:bg-[#2a1914] text-[#2b1a17] dark:text-cream outline-none focus:ring-2 focus:ring-gold"
+                  />
                 </div>
-                <input type="text" name="subject" placeholder="Subject" value={formData.subject} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gold/30 bg-white dark:bg-[#2a1914] text-[#2b1a17] dark:text-cream outline-none focus:ring-2 focus:ring-gold" />
-                <textarea name="message" placeholder="Message" rows={5} value={formData.message} onChange={handleChange} required className="w-full px-4 py-2 rounded-lg border border-gold/30 bg-white dark:bg-[#2a1914] text-[#2b1a17] dark:text-cream outline-none focus:ring-2 focus:ring-gold resize-none" />
-                <button type="submit" disabled={isSubmitting} className={`w-full px-6 py-3 flex items-center justify-center gap-2 rounded-lg font-semibold text-white transition-all ${isSubmitting ? 'bg-gold/60 cursor-not-allowed' : 'bg-gold hover:bg-yellow-500'}`}>
+                <input
+                  type="text"
+                  name="subject"
+                  placeholder="Subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 rounded-lg border border-gold/30 bg-white dark:bg-[#2a1914] text-[#2b1a17] dark:text-cream outline-none focus:ring-2 focus:ring-gold"
+                />
+                <textarea
+                  name="message"
+                  placeholder="Message"
+                  rows={5}
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 rounded-lg border border-gold/30 bg-white dark:bg-[#2a1914] text-[#2b1a17] dark:text-cream outline-none focus:ring-2 focus:ring-gold resize-none"
+                />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full px-6 py-3 flex items-center justify-center gap-2 rounded-lg font-semibold text-white transition-all ${
+                    isSubmitting ? 'bg-gold/60 cursor-not-allowed' : 'bg-gold hover:bg-yellow-500'
+                  }`}
+                >
                   {isSubmitting ? (
                     <>
                       <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
